@@ -2,6 +2,7 @@ const { response, request } = require("express");
 const bcrypt = require("bcryptjs");
 const pool = require("../database/db");
 const generateJwt = require("../helpers/jwt");
+const userIdGenerator = require("../helpers/user-id-generator");
 
 async function validEmail(req = request, res = response) {
   try {
@@ -15,7 +16,7 @@ async function validEmail(req = request, res = response) {
     }
 
     if (emailQuery.rows) {
-      return res.status(201).json({ status: "EXISTS", email: emailQuery.rows[0].email });
+      return res.status(201).json({ status: "EXISTS", email: emailQuery.rows[0].user_email });
     }
 
   } catch (error) {
@@ -30,7 +31,7 @@ async function createUser(req = request, res = response) {
     password = bcrypt.hashSync(password, salt);
 
     const createUserQuery = await pool.query(
-      `INSERT INTO users (user_name, user_email, user_password) VALUES ('${username}', '${email}', '${password}')`
+      `INSERT INTO users (user_id, user_name, user_email, user_password) VALUES ('${userIdGenerator()}', '${username}', '${email}', '${password}')`
     );
 
     return res.status(201).json({ status: "CREATED", result: createUserQuery.rows });
@@ -46,8 +47,9 @@ async function loginUser(req = request, res = response) {
     const loginQuery = await pool.query(
       `SELECT * FROM users WHERE user_email = '${email}'`
     );
-    const { id, password, username } = loginQuery.rows[0];
-    const validPassword = bcrypt.compareSync(passwordBody, password);
+
+    const { user_id, user_password, user_name } = loginQuery.rows[0];
+    const validPassword = bcrypt.compareSync(passwordBody, user_password);
 
     if (!validPassword) {
       return res.status(400).json(
@@ -55,7 +57,7 @@ async function loginUser(req = request, res = response) {
       );
     }
 
-    const token = await generateJwt(id, username);
+    const token = await generateJwt(user_id, user_name);
     return res.status(201).json(
       { status: "SUCCESS", message: "Logged in", token }
     );
@@ -66,7 +68,15 @@ async function loginUser(req = request, res = response) {
 }
 
 async function renewToken(req = request, res = response) {
+  const uid = req.uid;
+  const username = req.username;
 
+  const token = await generateJwt(uid, username);
+  
+  return res.json({
+    status: "OK",
+    uid,
+  });
 }
 
 module.exports = {

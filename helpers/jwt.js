@@ -5,7 +5,7 @@ function generateJwt(id, username) {
   return new Promise((resolve, reject) => {
     const payload = { id, username };
     
-    jwt.sign(payload, "djkb3k1jbd", {
+    jwt.sign(payload, process.env.JWT_SEED, {
       expiresIn: "2h",
     }, (error, token) => {
       if (error) {
