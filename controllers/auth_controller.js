@@ -6,7 +6,7 @@ const generateJwt = require("../helpers/jwt");
 async function validEmail(req = request, res = response) {
   try {
     const { email } = req.body;
-    const emailQuery = await pool.query(`SELECT email FROM users WHERE email = '${email}'`);
+    const emailQuery = await pool.query(`SELECT user_email FROM users WHERE user_email = '${email}'`);
 
     if (emailQuery.rowCount === 0) {
       return res.status(201).json({
@@ -30,7 +30,7 @@ async function createUser(req = request, res = response) {
     password = bcrypt.hashSync(password, salt);
 
     const createUserQuery = await pool.query(
-      `INSERT INTO users (username, email, password) VALUES ('${username}', '${email}', '${password}')`
+      `INSERT INTO users (user_name, user_email, user_password) VALUES ('${username}', '${email}', '${password}')`
     );
 
     return res.status(201).json({ status: "CREATED", result: createUserQuery.rows });
@@ -44,7 +44,7 @@ async function loginUser(req = request, res = response) {
   try {
     const { email, password: passwordBody } = req.body;
     const loginQuery = await pool.query(
-      `SELECT * FROM users WHERE email = '${email}'`
+      `SELECT * FROM users WHERE user_email = '${email}'`
     );
     const { id, password, username } = loginQuery.rows[0];
     const validPassword = bcrypt.compareSync(passwordBody, password);

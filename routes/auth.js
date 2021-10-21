@@ -7,7 +7,7 @@ const router = Router();
 
 // api/auth/
 router.post(
-  "/ask-email",
+  "/valid-email",
   [
     check("email", "Email is required").isEmail(),
     fieldsValidator
