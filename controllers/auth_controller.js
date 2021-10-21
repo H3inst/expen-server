@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const pool = require("../database/db");
 const generateJwt = require("../helpers/jwt");
 
-async function askForEmail(req = request, res = response) {
+async function validEmail(req = request, res = response) {
   try {
     const { email } = req.body;
     const emailQuery = await pool.query(`SELECT email FROM users WHERE email = '${email}'`);
@@ -70,7 +70,7 @@ async function renewToken(req = request, res = response) {
 }
 
 module.exports = {
-  askForEmail,
+  validEmail,
   createUser,
   loginUser,
   renewToken,

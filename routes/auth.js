@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createUser, askForEmail, loginUser, renewToken } = require("../controllers/auth_controller");
+const { validEmail, createUser, loginUser, renewToken } = require("../controllers/auth_controller");
 const { check } = require("express-validator");
 const fieldsValidator = require("../middlewares/fields-validator");
 
@@ -12,7 +12,7 @@ router.post(
     check("email", "Email is required").isEmail(),
     fieldsValidator
   ],
-  askForEmail
+  validEmail
 );
 router.post(
   "/new",
