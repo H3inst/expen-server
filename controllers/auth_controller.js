@@ -80,7 +80,7 @@ async function renewToken(req = request, res = response) {
 
   return res.json({
     status: "OK",
-    uid,
+    token
   });
 }
 
