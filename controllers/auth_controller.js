@@ -20,7 +20,7 @@ async function validEmail(req = request, res = response) {
       return res.status(201).json({
         status: "ok",
         account: "EXIST",
-        email: emailQuery.rows[0].user_email
+        email: rows[0].user_email
       });
     }
 
