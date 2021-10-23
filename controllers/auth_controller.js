@@ -34,11 +34,12 @@ async function createUser(req = request, res = response) {
     let { username, email, password } = req.body;
     const salt = bcrypt.genSaltSync();
     password = bcrypt.hashSync(password, salt);
-    const token = await generateJwt(userIdGenerator(), username);
+    const userId = userIdGenerator();
+    const token = await generateJwt(userId, username);
 
     await pool.query(
       AUTH.createUserQuery,
-      [userIdGenerator, username, email, password]
+      [userId, username, email, password]
     );
     return res.status(201).json({ status: "ok", account: "CREATED", token });
 
