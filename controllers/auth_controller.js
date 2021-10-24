@@ -41,7 +41,12 @@ async function createUser(req = request, res = response) {
       AUTH.createUserQuery,
       [userId, username, email, password]
     );
-    return res.json({ status: "ok", account: "CREATED", token });
+    return res.json({
+      status: "ok",
+      account: "CREATED",
+      message: "Cuenta creada con éxito",
+      token
+    });
 
   } catch (error) {
     throw new Error(error.message);
@@ -58,14 +63,17 @@ async function loginUser(req = request, res = response) {
 
     if (!validPassword) {
       return res.json(
-        { status: "FAILED", message: "Incorrect password" }
+        { status: "FAILED", message: "La contraseña ingresada no es correcta." }
       );
     }
 
     const token = await generateJwt(user_id, user_name);
-    return res.json(
-      { status: "SUCCESS", account: "LOGGED", token }
-    );
+    return res.json({
+        status: "SUCCESS",
+        account: "LOGGED",
+        message: "Inicio de sesión exitoso.",
+        token
+      });
 
   } catch (error) {
     throw new Error(error.message);
@@ -79,7 +87,7 @@ async function renewToken(req = request, res = response) {
   const token = await generateJwt(uid, username);
 
   return res.json({
-    status: "OK",
+    status: "ok",
     token
   });
 }
