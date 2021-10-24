@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   "/valid-email",
   [
-    check("email", "Email is required").isEmail(),
+    check("email", "El correo que deseas usar es inválido.").isEmail(),
     fieldsValidator
   ],
   validEmail
