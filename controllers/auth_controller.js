@@ -45,6 +45,7 @@ async function createUser(req = request, res = response) {
       status: "ok",
       account: "CREATED",
       message: "Cuenta creada con éxito",
+      user: { userId, username },
       token
     });
 
@@ -63,17 +64,18 @@ async function loginUser(req = request, res = response) {
 
     if (!validPassword) {
       return res.json(
-        { status: "FAILED", message: "La contraseña ingresada no es correcta." }
+        { status: "failed", message: "La contraseña ingresada no es correcta." }
       );
     }
 
     const token = await generateJwt(user_id, user_name);
     return res.json({
-        status: "SUCCESS",
-        account: "LOGGED",
-        message: "Inicio de sesión exitoso.",
-        token
-      });
+      status: "SUCCESS",
+      account: "LOGGED",
+      message: "Inicio de sesión exitoso.",
+      user: { user_id, user_name },
+      token
+    });
 
   } catch (error) {
     throw new Error(error.message);

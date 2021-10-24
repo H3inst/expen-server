@@ -20,7 +20,7 @@ router.post(
   [
     check("email", "Email is required").isEmail(),
     check("username", "Username is required").not().isEmpty(),
-    check("password", "Password should have at least five characters").isLength({ min: 5 }),
+    check("password", "La contraseña debe tener al menos 5 caracteres.").isLength({ min: 5 }),
     fieldsValidator
   ],
   createUser
@@ -29,7 +29,7 @@ router.post(
   "/",
   [
     check("email", "Email is required").isEmail(),
-    check("password", "Incorrect password"),
+    check("password", "El campo de contraseña no puede estar vacío."),
     fieldsValidator
   ],
   loginUser
