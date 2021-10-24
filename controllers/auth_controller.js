@@ -11,13 +11,13 @@ async function validEmail(req = request, res = response) {
     const { rows, rowCount } = await pool.query(AUTH.validEmailQuery, [email]);
 
     if (rowCount === 0) {
-      return res.status(201).json({
+      return res.json({
         status: "ok", account: "NEW", email: email,
       });
     }
 
     if (rows) {
-      return res.status(201).json({
+      return res.json({
         status: "ok",
         account: "EXIST",
         email: rows[0].user_email
@@ -41,7 +41,7 @@ async function createUser(req = request, res = response) {
       AUTH.createUserQuery,
       [userId, username, email, password]
     );
-    return res.status(201).json({ status: "ok", account: "CREATED", token });
+    return res.json({ status: "ok", account: "CREATED", token });
 
   } catch (error) {
     throw new Error(error.message);
@@ -57,13 +57,13 @@ async function loginUser(req = request, res = response) {
     const validPassword = bcrypt.compareSync(passwordBody, user_password);
 
     if (!validPassword) {
-      return res.status(400).json(
+      return res.json(
         { status: "FAILED", message: "Incorrect password" }
       );
     }
 
     const token = await generateJwt(user_id, user_name);
-    return res.status(201).json(
+    return res.json(
       { status: "SUCCESS", account: "LOGGED", token }
     );
 
