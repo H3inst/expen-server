@@ -70,7 +70,7 @@ async function loginUser(req = request, res = response) {
 
     const token = await generateJwt(user_id, user_name);
     return res.json({
-      status: "SUCCESS",
+      status: "ok",
       account: "LOGGED",
       message: "Inicio de sesión exitoso.",
       user: { user_id, user_name },
