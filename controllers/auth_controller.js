@@ -1,8 +1,8 @@
 const { response, request } = require("express");
 const bcrypt = require("bcryptjs");
+const { uuid } = require("uuidv4");
 const pool = require("../database/db");
 const generateJwt = require("../helpers/jwt");
-const userIdGenerator = require("../helpers/user-id-generator");
 const { AUTH } = require("../database/queries");
 
 async function validEmail(req = request, res = response) {
@@ -34,7 +34,7 @@ async function createUser(req = request, res = response) {
     let { username, email, password } = req.body;
     const salt = bcrypt.genSaltSync();
     password = bcrypt.hashSync(password, salt);
-    const userId = userIdGenerator();
+    const userId = uuid();
     const token = await generateJwt(userId, username);
 
     await pool.query(
