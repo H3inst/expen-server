@@ -90,6 +90,7 @@ async function renewToken(req = request, res = response) {
 
   return res.json({
     status: "ok",
+    user: { uid, username },
     token
   });
 }
