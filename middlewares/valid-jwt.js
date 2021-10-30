@@ -5,7 +5,7 @@ async function validJwt(req = request, res = response, next) {
   const token = req.header("x-token");
 
   if (!token) {
-    return res.status(401).json({
+    return res.json({
       status: "error",
       message: "No token provided"
     });
