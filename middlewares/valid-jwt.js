@@ -5,21 +5,22 @@ async function validJwt(req = request, res = response, next) {
   const token = req.header("x-token");
 
   if (!token) {
-    return res.status(401).json({
-      status: "ERROR",
+    return res.json({
+      status: "error",
       message: "No token provided"
     });
   }
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SEED);
+    console.log(payload);
 
-    req.uid = payload.id;
+    req.uid = payload.uid;
     req.name = payload.username;
 
   } catch (error) {
-    return res.status(401).json({
-      status: "ERROR",
+    return res.json({
+      status: "error",
       message: "No valid token"
     });
   }

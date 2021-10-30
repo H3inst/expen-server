@@ -84,7 +84,7 @@ async function loginUser(req = request, res = response) {
 
 async function renewToken(req = request, res = response) {
   const uid = req.uid;
-  const username = req.username;
+  const username = req.name;
 
   const token = await generateJwt(uid, username);
 
