@@ -5,7 +5,7 @@ async function validJwt(req = request, res = response, next) {
   const token = req.header("x-token");
 
   if (!token) {
-    return res.json({
+    return res.status(401).json({
       status: "error",
       message: "No token provided"
     });
@@ -19,7 +19,7 @@ async function validJwt(req = request, res = response, next) {
     req.name = payload.username;
 
   } catch (error) {
-    return res.json({
+    return res.status(401).json({
       status: "error",
       message: "No valid token"
     });
