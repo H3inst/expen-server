@@ -7,10 +7,14 @@ CREATE TABLE users (
     user_password TEXT NOT NULL
 );
 
-CREATE TABLE registers (
-    register_id VARCHAR (255) PRIMARY KEY NOT NULL,
-    register_desc TEXT NOT NULL,
-    register_ammount FLOAT NOT NULL,
-    register_category TEXT,
-    register_date TIMESTAMP
+CREATE TABLE activities (
+    activity_id VARCHAR (255) PRIMARY KEY NOT NULL,
+    activity_type VARCHAR (255) NOT NULL,
+    activity_desc TEXT NOT NULL,
+    activity_ammount FLOAT NOT NULL,
+    activity_category TEXT,
+    activity_date TIMESTAMP,
+    CONSTRAINT fk_user
+        FOREIGN KEY(user_id)
+            REFERENCES users(user_id)
 );
