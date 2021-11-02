@@ -13,13 +13,12 @@ async function validJwt(req = request, res = response, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SEED);
-    console.log(payload);
 
     req.uid = payload.uid;
     req.name = payload.username;
 
   } catch (error) {
-    return res.status(401).json({
+    return res.json({
       status: "error",
       message: "No valid token"
     });
