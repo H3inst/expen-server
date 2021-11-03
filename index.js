@@ -12,7 +12,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/auth", require("./routes/auth"));
-app.use("/api/activities", require("./routes/activity"));
+app.use("/api/activities", require("./routes/activities"));
 
 // port listening
 app.listen(process.env.SERVER_PORT, function () {

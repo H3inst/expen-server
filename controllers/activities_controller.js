@@ -4,8 +4,12 @@ const { ACTIVITIES } = require("../database/queries");
 
 async function getUserBalance(req = request, res = response) {
   try {
-    let { userId } = req.body;
-    const { rows } = await pool.query(ACTIVITIES.getActualBalanceQuery, [userId]);
+    let { uid } = req.params;
+    const { rows } = await pool.query(ACTIVITIES.getActualBalanceQuery, [uid]);
+
+    if (!uid) {
+      return res.json({ status: "error", message: "User ID not provided." });
+    }
 
     if (rows) {
       return res.json({
@@ -23,4 +27,4 @@ async function getUserBalance(req = request, res = response) {
 
 module.exports = {
   getUserBalance,
-}
+};
