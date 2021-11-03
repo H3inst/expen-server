@@ -5,6 +5,7 @@ const AUTH = {
 }
 const ACTIVITIES = {
   getActualBalanceQuery: "SELECT user_balance FROM users WHERE user_id = $1",
+  getAllActivities: "SELECT * FROM activities WHERE user_id = $1",
 }
 
 module.exports = {

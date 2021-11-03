@@ -4,19 +4,13 @@ const { ACTIVITIES } = require("../database/queries");
 
 async function getUserBalance(req = request, res = response) {
   try {
-    let { uid } = req.params;
+    let uid = req.uid;
     const { rows } = await pool.query(ACTIVITIES.getActualBalanceQuery, [uid]);
-
-    if (!uid) {
-      return res.json({ status: "error", message: "User ID not provided." });
-    }
 
     if (rows) {
       return res.json({
         status: "ok",
-        user: {
-          user_balance: rows[0].user_balance
-        }
+        user: { user_balance: rows[0].user_balance }
       });
     }
 
@@ -27,8 +21,16 @@ async function getUserBalance(req = request, res = response) {
 
 async function getAllActivities(req = request, res = response) {
   try {
-    
-    
+    let uid = req.uid;
+    const { rows } = await pool.query(ACTIVITIES.getAllActivities, [uid]);
+
+    if (rows) {
+      return res.json({
+        status: "ok",
+        data: rows
+      });
+    }
+
   } catch (error) {
     throw new Error(error.message);
   }
