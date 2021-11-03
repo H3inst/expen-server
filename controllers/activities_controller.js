@@ -25,6 +25,16 @@ async function getUserBalance(req = request, res = response) {
   }
 }
 
+async function getAllActivities(req = request, res = response) {
+  try {
+    
+    
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 module.exports = {
   getUserBalance,
+  getAllActivities
 };
