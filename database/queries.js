@@ -6,6 +6,7 @@ const AUTH = {
 const ACTIVITIES = {
   getActualBalanceQuery: "SELECT user_balance FROM users WHERE user_id = $1",
   getAllActivities: "SELECT * FROM activities WHERE user_id = $1",
+  createExpense: "INSERT INTO activities (activity_id, user_id, activity_desc, activity_type, activity_amount, activity_category) VALUES ($1, $2, $3, $4, $5, $6)"
 }
 
 module.exports = {
