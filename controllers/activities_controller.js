@@ -4,15 +4,24 @@ const { v4 } = require("uuid");
 const pool = require("../database/db");
 const { ACTIVITIES } = require("../database/queries");
 
-async function getUserBalance(req = request, res = response) {
+async function getUserSummary(req = request, res = response) {
   try {
     let uid = req.uid;
-    const { rows } = await pool.query(ACTIVITIES.getActualBalanceQuery, [uid]);
+    const { rows: balanceRow } = await pool.query(ACTIVITIES.getActualBalanceQuery, [uid]);
+    const { rowCount, rows: totalExpensesRow } = await pool.query(ACTIVITIES.getExpensesCount, [uid]);
 
-    if (rows) {
+    let wepa = totalExpensesRow.reduce((acc, el) => {
+      return el.activity_amount + acc;  
+    }, 0);
+
+    if (balanceRow && totalExpensesRow) {
       return res.json({
         status: "ok",
-        user: { user_balance: rows[0].user_balance }
+        user: {
+          user_balance: balanceRow[0].user_balance,
+          user_total_expenses: rowCount,
+          user_total_amount: wepa
+        }
       });
     }
 
@@ -61,8 +70,23 @@ async function createExpense(req = request, res = response) {
   }
 }
 
+async function getAllExpenses(req = request, res = response) {
+  try {
+    let uid = req.uid;
+    const { rows } = await pool.query(ACTIVITIES.getAllExpenses, [uid]);
+
+    if (rows) {
+      return res.json({ status: "ok", data: { expenses: rows, } });
+    }
+
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
 module.exports = {
-  getUserBalance,
+  getUserSummary,
   getAllActivities,
-  createExpense
+  createExpense,
+  getAllExpenses
 };
